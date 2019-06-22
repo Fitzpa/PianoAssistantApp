@@ -131,6 +131,18 @@ img {
 .py-3 {
   padding: 3rem 0;
 }
+.px {
+  padding: 0 0.5rem;
+}
+.px-1 {
+  padding: 0 1rem;
+}
+.px-2 {
+  padding: 0 2rem;
+}
+.px-3 {
+  padding: 0 3rem;
+}
 
 /* Margin */
 .m {
