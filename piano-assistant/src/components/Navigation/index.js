@@ -1,54 +1,56 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React from "react";
+import { Link } from "react-router-dom";
 
-import { AuthUserContext } from '../Session';
-import SignOutButton from '../SignOut';
-import * as ROUTES from '../../constants/routes';
-import * as ROLES from '../../constants/roles';
+import { AuthUserContext } from "../Session";
+import SignOutButton from "../SignOut";
+import * as ROUTES from "../../constants/routes";
+import * as ROLES from "../../constants/roles";
+import "./navigation.css";
 
 const Navigation = () => (
   <AuthUserContext.Consumer>
     {authUser =>
-      authUser ? (
-        <NavigationAuth authUser={authUser} />
-      ) : (
-        <NavigationNonAuth />
-      )
+      authUser ? <NavigationAuth authUser={authUser} /> : <NavigationNonAuth />
     }
   </AuthUserContext.Consumer>
 );
 
 const NavigationAuth = ({ authUser }) => (
-  <ul>
-    <li>
-      <Link to={ROUTES.LANDING}>Landing</Link>
-    </li>
-    <li>
-      <Link to={ROUTES.HOME}>Home</Link>
-    </li>
-    <li>
-      <Link to={ROUTES.ACCOUNT}>Account</Link>
-    </li>
-    {!!authUser.roles[ROLES.ADMIN] && (
+  <div className="navContainer">
+    <h1>Piano Time</h1>
+    <ul>
       <li>
-        <Link to={ROUTES.ADMIN}>Admin</Link>
+        <Link to={ROUTES.LANDING}>Landing</Link>
       </li>
-    )}
-    <li>
-      <SignOutButton />
-    </li>
-  </ul>
+      <li>
+        <Link to={ROUTES.HOME}>Home</Link>
+      </li>
+      <li>
+        <Link to={ROUTES.ACCOUNT}>Account</Link>
+      </li>
+      {!!authUser.roles[ROLES.ADMIN] && (
+        <li>
+          <Link to={ROUTES.ADMIN}>Admin</Link>
+        </li>
+      )}
+      <li>
+        <SignOutButton />
+      </li>
+    </ul>
+  </div>
 );
 
 const NavigationNonAuth = () => (
-  <ul>
-    <li>
-      <Link to={ROUTES.LANDING}>Landing</Link>
-    </li>
-    <li>
-      <Link to={ROUTES.SIGN_IN}>Sign In</Link>
-    </li>
-  </ul>
+  <div className="navContainer">
+    <ul>
+      <li>
+        <Link to={ROUTES.LANDING}>Landing</Link>
+      </li>
+      <li>
+        <Link to={ROUTES.SIGN_IN}>Sign In</Link>
+      </li>
+    </ul>
+  </div>
 );
 
 export default Navigation;

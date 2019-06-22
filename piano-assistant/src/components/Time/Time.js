@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 
 import { withFirebase } from "../Firebase";
-
+import './time.css';
 class Time extends Component {
   state = {
     timerOn: false,
@@ -47,7 +47,7 @@ class Time extends Component {
     let minutes = ("0" + (Math.floor(timerTime / 60000) % 60)).slice(-2);
     let hours = ("0" + Math.floor(timerTime / 3600000)).slice(-2);
     return (
-      <div className="timerContainer">
+      <div className="timerContainer card">
         <div className="Stopwatch-display">
           {hours} : {minutes} : {seconds}
         </div>
