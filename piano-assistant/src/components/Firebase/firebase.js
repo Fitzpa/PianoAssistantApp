@@ -32,8 +32,7 @@ class Firebase {
     this.twitterProvider = new app.auth.TwitterAuthProvider();
   }
 
-  
-  REACT_APP_CONFIRMATION_EMAIL_REDIRECT = "http://localhost:3000"
+  REACT_APP_CONFIRMATION_EMAIL_REDIRECT = "http://localhost:3000";
 
   // *** Auth API ***
 
@@ -94,14 +93,18 @@ class Firebase {
   // *** User API ***
 
   user = uid => this.db.doc(`users/${uid}`);
-
+  // time = uid => this.db.doc(`users/time/${uid}`);
   users = () => this.db.collection("users");
+  // times = () => this.db.collection("users");
 
   // *** Message API ***
 
   message = uid => this.db.doc(`messages/${uid}`);
 
   messages = () => this.db.collection("messages");
+  time = uid => this.db.doc(`times/${uid}`);
+
+  times = () => this.db.collection("times");
 }
 
 export default Firebase;

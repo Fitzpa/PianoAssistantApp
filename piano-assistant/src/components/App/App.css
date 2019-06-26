@@ -90,6 +90,12 @@ img {
   text-align: left;
 }
 
+.align-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 1rem auto;
+}
 /* Cards */
 .card {
   padding: 1rem;
@@ -194,6 +200,8 @@ img {
   grid-template-columns: 2fr 3fr;
   grid-gap: 2rem;
 }
+
+
 
 .btn {
   display: inline-block;

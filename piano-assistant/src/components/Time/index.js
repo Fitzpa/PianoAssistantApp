@@ -1,3 +1,3 @@
-import Time from './Time';
+import Times from './Times';
 
-export default Time;
+export default Times;

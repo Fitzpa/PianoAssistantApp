@@ -6,7 +6,7 @@ import Messages from "../Messages";
 import Time from "../Time";
 
 const HomePage = () => (
-  <div>
+  <div id="modalTarget">
     <p>The Home Page is accessible by every signed in user.</p>
     <Time />
     <Messages />
