@@ -19,7 +19,7 @@ const App = () => (
     <div>
       <Navigation />
       <div className="container">
-        <hr />
+        {/* <hr /> */}
 
         <Route exact path={ROUTES.LANDING} component={LandingPage} />
         <Route path={ROUTES.SIGN_UP} component={SignUpPage} />

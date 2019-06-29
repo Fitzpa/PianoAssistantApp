@@ -1,9 +1,9 @@
 /* .navContainer */
 .navContainer {
   display: flex;
-  background-color: black;
   color: #fff;
   justify-content: space-between;
+  background-color: #0b0c10;
   align-items: center;
   padding: 0.7rem 2rem;
   z-index: 1;
@@ -12,6 +12,12 @@
   opacity: 0.9;
   margin-bottom: 1rem;
 }
+/* --primary-color: #1f2833;
+--secondary-color: #c5c6c7;
+--dark-color: #0b0c10;
+--light-color: #66fcf1;
+--danger-color: #45a29e;
+--success-color: #81a296; */
 
 .navContainer ul {
   display: flex;

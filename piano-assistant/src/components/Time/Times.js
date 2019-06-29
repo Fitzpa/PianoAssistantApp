@@ -7,17 +7,10 @@ import { withFirebase } from "../Firebase";
 import "./modalInput.css";
 import TimeList from "./TimeList";
 import Modal from "react-modal";
-import { NEG_ONE } from "long";
-
-const modalInputStyles = {
-  width: "90%",
-  lineHeight: "20px",
-  boxShadow: "0  5px 8px rgba(0, 0, 0, 0.2), 0  7px 20px rgba(0, 0, 0, 0.17)",
-  border: "none",
-};
 
 const customStyles = {
   content: {
+    backgroundColor: "#6d7993",
     maxWidth: "1080px",
     width: "100%",
     maxHeight: "1080px",
@@ -56,6 +49,7 @@ class Times extends Component {
     this.setState();
   }
 
+  // MODAL -----------------------------
   openModal() {
     this.setState({ modalIsOpen: true });
   }
@@ -68,49 +62,54 @@ class Times extends Component {
   closeModal() {
     this.setState({ modalIsOpen: false });
   }
-
+  // -------------------------------------------
   componentDidMount() {
     this.setState({ loading: true });
 
-    this.unsubscribe = this.props.firebase.times().onSnapshot(snapshot => {
-      if (snapshot.size) {
-        let times = [];
-        snapshot.forEach(doc => times.push({ ...doc.data(), uid: doc.id }));
-
-        this.setState({
-          times: times.reverse(),
-          loading: false,
-        });
-        console.log({ times });
-      } else {
-        this.setState({ times: null, loading: false });
-      }
-    });
+    this.unsubscribe = this.props.firebase
+      .times()
+      .orderBy("createdAt")
+      .onSnapshot(snapshot => {
+        if (snapshot.size) {
+          let times = [];
+          snapshot.forEach(doc => times.push({ ...doc.data(), uid: doc.id }));
+          this.setState({
+            times: times.reverse(),
+            loading: false,
+          });
+          console.log({ times });
+        } else {
+          this.setState({ times: null, loading: false });
+        }
+      });
   }
-
-  // onListenForTime() {}
 
   componentWillMount() {
     this.unsubscribe && this.unsubscribe();
   }
 
+  // Creates and logs the amount of time practiced,
+  // the users id and the exact date and time submitted
   onCreateTime = (event, authUser) => {
     this.props.firebase.times().add({
-      timerTime: Math.floor((this.state.timerTime / 1000) % 60),
+      timerTime: this.state.timerTime,
       userId: authUser.uid,
       createdAt: moment().format("MMMM D, YYYY, h:mm a"),
     });
     console.log("clicked");
+    console.log(this.timerTime);
 
     this.setState({ timerTime: 0 });
 
     event.preventDefault();
   };
 
+  // Removes the time record from the database permanently
   onRemoveTime = uid => {
     this.props.firebase.time(uid).delete();
   };
 
+  // Starts timing how long the user has been practicing
   startTimer = () => {
     this.setState({
       timerOn: true,
@@ -122,28 +121,22 @@ class Times extends Component {
       this.setState({
         timerTime: Date.now() - this.state.timerStart,
       });
-    }, 10);
+    }, 1000);
   };
 
+  // Stops timing the users practice session
   stopTimer = () => {
     this.setState({ timerOn: false });
     clearInterval(this.timer);
   };
 
+  // Resets the stopwatch
   resetTimer = () => {
     this.setState({
       timerStart: 0,
       timerTime: 0,
     });
   };
-
-  // logSession = () => {
-  //   this.setState({
-  //     if ({this.state.timerTime} > 0) {
-
-  //     }
-  //   });
-  // };
 
   render() {
     const { timerTime, times, loading } = this.state;
@@ -175,60 +168,74 @@ class Times extends Component {
                 )}
               </>
             </div>
-            <div className="timerContainer card">
+            <div className="card">
               <div className="Stopwatch-display">
                 {hours} : {minutes} : {seconds}
               </div>
-
-              {this.state.timerOn === false && this.state.timerTime === 0 && (
-                <>
-                  <Modal
-                    isOpen={this.state.modalIsOpen}
-                    onAfterOpen={this.afterOpenModal}
-                    onRequestClose={this.closeModal}
-                    style={customStyles}
-                    contentLabel="Example Modal"
+              <div className="timerContainer">
+                {this.state.timerOn === false && this.state.timerTime === 0 && (
+                  <>
+                    <Modal
+                      isOpen={this.state.modalIsOpen}
+                      onAfterOpen={this.afterOpenModal}
+                      onRequestClose={this.closeModal}
+                      style={customStyles}
+                      contentLabel="Example Modal"
+                    >
+                      <h2 ref={subtitle => (this.subtitle = subtitle)}>
+                        You can do it!
+                      </h2>
+                      <button
+                        className="align-center"
+                        onClick={this.startTimer}
+                      >
+                        START
+                      </button>
+                      <form>
+                        <span className="input">
+                          <input type="text" placeholder="Notes" />
+                          <span />
+                        </span>
+                      </form>
+                    </Modal>
+                    <button className="stopwatchBtn playBtn p" onClick={this.openModal}>
+                      <i className="fas fa-play" />
+                    </button>
+                  </>
+                )}
+                {this.state.timerOn === true && (
+                  <button
+                    className="stopwatchBtn pauseTimer reset p mx"
+                    onClick={this.stopTimer}
                   >
-                    <h2 ref={subtitle => (this.subtitle = subtitle)}>You can do it!</h2>
-                    <button className="align-center" onClick={this.startTimer}>START</button>
-                    <form>
-                      <span className="input">
-                        <input
-                          type="text"
-                          placeholder="Activity goes here..."
-                        />
-                        <span />
-                      </span>
-                    </form>
-                  </Modal>
-                  <button onClick={this.openModal}>
+                    <i className="fas fa-pause" />
+                  </button>
+                )}
+                {this.state.timerOn === false && this.state.timerTime > 0 && (
+                  <button
+                    className="stopwatchBtn startTimer reset p mx"
+                    onClick={this.startTimer}
+                  >
                     <i className="fas fa-play" />
                   </button>
-                </>
-              )}
-              {this.state.timerOn === true && (
-                <button className="pauseTimer reset" onClick={this.stopTimer}>
-                  <i className="fas fa-pause" />
-                </button>
-              )}
-              {this.state.timerOn === false && this.state.timerTime > 0 && (
-                <button className="startTimer reset" onClick={this.startTimer}>
-                  <i className="fas fa-play" />
-                </button>
-              )}
-              {this.state.timerOn === false && this.state.timerTime > 0 && (
-                <button className="resetTimer reset" onClick={this.resetTimer}>
-                  Reset
-                </button>
-              )}
-              {this.state.timerOn === false && this.state.timerTime > 0 && (
-                <button
-                  className="logSession reset"
-                  onClick={event => this.onCreateTime(event, authUser)}
-                >
-                  Log Session
-                </button>
-              )}
+                )}
+                {this.state.timerOn === false && this.state.timerTime > 0 && (
+                  <button
+                    className="stopwatchBtn resetTimer reset p mx"
+                    onClick={this.resetTimer}
+                  >
+                    Reset
+                  </button>
+                )}
+                {this.state.timerOn === false && this.state.timerTime > 0 && (
+                  <button
+                    className="stopwatchBtn logSession reset p mx"
+                    onClick={event => this.onCreateTime(event, authUser)}
+                  >
+                    Log Session
+                  </button>
+                )}
+              </div>
             </div>
           </div>
         )}
