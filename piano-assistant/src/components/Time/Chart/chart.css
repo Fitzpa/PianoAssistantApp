@@ -1,0 +1,13 @@
+/* // --success-color: #81a296;
+// --primary-color: #1f2833;
+// --secondary-color: #c5c6c7;
+// --dark-color: #0b0c10;
+// --light-color: #66fcf1;
+// --danger-color: #45a29e; */
+.Chart {
+  background: #c5c6c7;
+  margin: 1rem 0;
+  box-shadow: 0 7px 12px rgba(0, 0, 0, 0.3), 0 10px 10px rgba(0, 0, 0, 0.2),
+    inset 0 0 15px rgba(0, 0, 0, 0.4);
+  border-radius: 10px;
+}

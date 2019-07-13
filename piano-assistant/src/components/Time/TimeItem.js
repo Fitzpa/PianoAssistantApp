@@ -23,13 +23,16 @@ class TimeItem extends Component {
                 <span className="col">
                   <strong>{time.createdAt + " "}</strong>
                 </span>
+                <span className="col">
+                  <strong>{time.note + " "}</strong>
+                </span>
 
                 <button
-                  className="col"
+                  className="trashBtn col"
                   type="button"
                   onClick={() => onRemoveTime(time.uid)}
                 >
-                  X
+                  <i className="fas fa-trash"></i>
                 </button>
               </>
             }

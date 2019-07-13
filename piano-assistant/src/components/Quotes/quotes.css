@@ -1,0 +1,20 @@
+.quotesView {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    flex-direction: column;
+    padding: 15px 0;
+}
+
+.quoteContent {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    padding: 15px 0;
+}
+.authorContent {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    padding: 15px 0;
+}

@@ -56,22 +56,28 @@ img {
 }
 
 .Stopwatch-display {
-
   text-align: center;
-
 }
 
 .timerContainer {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-content: center;
 }
 
 .pauseTimer {
-grid-column: span 3 / 4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 50px;
+  width: 50px;
+  line-height: 50px;
 }
 
-.playBtn {
-grid-column: span 3 / 4;
+.signInBtns {
+  padding: 0 0.5rem;
+  margin: 5px 0;
 }
 
 .stopwatchBtn {
@@ -104,6 +110,10 @@ grid-column: span 3 / 4;
 
 .text-primary {
   color: var(--primary-color);
+}
+
+.text-white {
+  color: #fff;
 }
 
 .text-dark {
@@ -407,6 +417,21 @@ button {
 button {
   border-radius: 5px;
   border-style: none;
+  box-shadow: 0px 5px 16px rgba(0, 0, 0, 0.3), 0px 1px 10px rgba(0, 0, 0, 0.2),
+    inset 4px 4px 15px 0px rgba(0, 0, 0, 0.2);
+}
+
+button:hover {
+  box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.1), 0px 1px 10px rgba(0, 0, 0, 0.2),
+    inset 4px 4px 15px 0px rgba(0, 0, 0, 0.2);
+}
+
+button:active {
+  box-shadow: inset 4px 4px 15px 0px rgba(0, 0, 0, 0.2);
+}
+
+button:focus {
+  outline: 0;
 }
 
 .form-group {

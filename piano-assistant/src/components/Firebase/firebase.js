@@ -32,7 +32,7 @@ class Firebase {
     this.twitterProvider = new app.auth.TwitterAuthProvider();
   }
 
-  REACT_APP_CONFIRMATION_EMAIL_REDIRECT = "http://localhost:3000";
+  REACT_APP_CONFIRMATION_EMAIL_REDIRECT = "/";
 
   // *** Auth API ***
 
@@ -52,10 +52,8 @@ class Firebase {
 
   doPasswordReset = email => this.auth.sendPasswordResetEmail(email);
 
-  doSendEmailVerification = () =>
-    this.auth.currentUser.sendEmailVerification({
-      url: process.env.REACT_APP_CONFIRMATION_EMAIL_REDIRECT,
-    });
+  doSendEmailVerification = (email) =>
+    this.auth.currentUser.sendEmailVerification(email);
 
   doPasswordUpdate = password => this.auth.currentUser.updatePassword(password);
 
@@ -97,11 +95,12 @@ class Firebase {
   users = () => this.db.collection("users");
   // times = () => this.db.collection("users");
 
-  // *** Message API ***
+  // *** Quotes API ***
 
-  message = uid => this.db.doc(`messages/${uid}`);
+  quote = uid => this.db.doc(`quotes/${uid}`);
 
-  messages = () => this.db.collection("messages");
+  quotes = () => this.db.collection("quotes");
+
   time = uid => this.db.doc(`times/${uid}`);
 
   times = () => this.db.collection("times");

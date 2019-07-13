@@ -26,7 +26,7 @@ const INITIAL_STATE = {
 };
 
 const ERROR_CODE_ACCOUNT_EXISTS =
-  'auth/account-exists-with-different-credential';
+  'auth/account-exists-with-different-cential';
 
 const ERROR_MSG_ACCOUNT_EXISTS = `
   An account with an E-Mail address to
@@ -83,7 +83,7 @@ class SignInFormBase extends Component {
           type="password"
           placeholder="Password"
         />
-        <button disabled={isInvalid} type="submit">
+        <button className="signInBtns" disabled={isInvalid} type="submit">
           Sign In
         </button>
 
@@ -134,7 +134,7 @@ class SignInGoogleBase extends Component {
 
     return (
       <form onSubmit={this.onSubmit}>
-        <button type="submit">Sign In with Google</button>
+        <button className="signInBtns" type="submit">Sign In with Google</button>
 
         {error && <p>{error.message}</p>}
       </form>
@@ -183,7 +183,7 @@ class SignInFacebookBase extends Component {
 
     return (
       <form onSubmit={this.onSubmit}>
-        <button type="submit">Sign In with Facebook</button>
+        <button className="signInBtns" type="submit">Sign In with Facebook</button>
 
         {error && <p>{error.message}</p>}
       </form>
@@ -232,7 +232,7 @@ class SignInTwitterBase extends Component {
 
     return (
       <form onSubmit={this.onSubmit}>
-        <button type="submit">Sign In with Twitter</button>
+        <button className="signInBtns" type="submit">Sign In with Twitter</button>
 
         {error && <p>{error.message}</p>}
       </form>

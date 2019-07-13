@@ -2,10 +2,9 @@
     position: relative;
     font-size: 1.2em;
     width: 100%;
-    background: linear-gradient(21deg, #10abff, #1beabd);
     padding: 3px;
     display: inline-block;
-    border-radius: 9999em;
+    border-radius: 10px;
   }
   .input *:not(span) {
     position: relative;
@@ -39,11 +38,11 @@
     bottom: 0;
     border-radius: inherit;
     pointer-events: none;
-    box-shadow: inset 0 0 0 3px #fff, 0 0 0 4px #fff, 3px -3px 30px #1beabd,  -3px 3px 30px #10abff;
+    
   }
   
   
-  input {
+  textarea {
     font-family: inherit;
     line-height: inherit;
     color: #2e3750;
@@ -68,7 +67,7 @@
   
   html::after {
     content: '';
-    background: linear-gradient(21deg, #10abff, #1beabd);
+    
     height: inherit + .5px;
     width: 100%;
     position: absolute;

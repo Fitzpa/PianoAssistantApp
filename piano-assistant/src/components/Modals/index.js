@@ -36,7 +36,7 @@ class ToglModal extends React.Component {
 
   afterOpenModal() {
     // references are now sync'd and can be accessed.
-    this.subtitle.style.color = "#f00";
+    this..style.color = "#f00";
   }
 
   closeModal() {

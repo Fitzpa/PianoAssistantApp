@@ -4,16 +4,25 @@ import moment from "moment";
 
 import { AuthUserContext } from "../Session";
 import { withFirebase } from "../Firebase";
-import "./modalInput.css";
+import "./time.css";
+import Chart from "./Chart";
 import TimeList from "./TimeList";
 import Modal from "react-modal";
 
+
+// --success-color: #81a296;
+//   --primary-color: #1f2833;
+//   --secondary-color: #c5c6c7;
+//   --dark-color: #0b0c10;
+//   --light-color: #66fcf1;
+//   --danger-color: #45a29e;
 const customStyles = {
   content: {
-    backgroundColor: "#6d7993",
-    maxWidth: "1080px",
+    color: "#c5c6c7",
+    backgroundColor: "#1f2833",
+    maxWidth: "800px",
     width: "100%",
-    maxHeight: "1080px",
+    maxHeight: "400px",
     height: "90%",
     top: "50%",
     left: "50%",
@@ -30,6 +39,9 @@ class Times extends Component {
     super(props);
 
     this.state = {
+      notes: [],
+      currentNote: "",
+      chartData: {},
       timerOn: false,
       timerStart: 0,
       timerTime: 0,
@@ -39,7 +51,7 @@ class Times extends Component {
       loading: false,
       modalIsOpen: false,
     };
-
+    this.handleChange = this.handleChange.bind(this);
     this.openModal = this.openModal.bind(this);
     this.afterOpenModal = this.afterOpenModal.bind(this);
     this.closeModal = this.closeModal.bind(this);
@@ -56,7 +68,7 @@ class Times extends Component {
 
   afterOpenModal() {
     // references are now sync'd and can be accessed.
-    this.subtitle.style.color = "#f00";
+    this.subtitle.style.color = "#fff";
   }
 
   closeModal() {
@@ -66,26 +78,45 @@ class Times extends Component {
   componentDidMount() {
     this.setState({ loading: true });
 
-    this.unsubscribe = this.props.firebase
+    this.props.firebase
       .times()
       .orderBy("createdAt")
       .onSnapshot(snapshot => {
         if (snapshot.size) {
           let times = [];
           snapshot.forEach(doc => times.push({ ...doc.data(), uid: doc.id }));
+          console.log("printing times", times);
+          const timesArr = { times }.times.map(function(times) {
+            return times.timerTime / 60000;
+          });
+          const datesArr = { times }.times.map(function(times) {
+            return times.createdAt;
+          });
+          const notesArr = { times }.times.map(function(times) {
+            return times.note;
+          });
           this.setState({
             times: times.reverse(),
+            notes: notesArr,
             loading: false,
+            chartData: {
+              labels: datesArr,
+              datasets: [
+                {
+                  label: "Time Played",
+                  data: timesArr,
+                  backgroundColor: "#1f2833",
+                },
+              ],
+            },
           });
-          console.log({ times });
+          console.log({ times }.times);
+          console.log(this.state.times);
+          console.log(this.state.chartData);
         } else {
           this.setState({ times: null, loading: false });
         }
       });
-  }
-
-  componentWillMount() {
-    this.unsubscribe && this.unsubscribe();
   }
 
   // Creates and logs the amount of time practiced,
@@ -94,7 +125,8 @@ class Times extends Component {
     this.props.firebase.times().add({
       timerTime: this.state.timerTime,
       userId: authUser.uid,
-      createdAt: moment().format("MMMM D, YYYY, h:mm a"),
+      createdAt: moment().format("MMM Do YY"),
+      note: this.state.currentNote,
     });
     console.log("clicked");
     console.log(this.timerTime);
@@ -116,12 +148,14 @@ class Times extends Component {
       timerTime: this.state.timerTime,
       timerStart: Date.now() - this.state.timerTime,
       modalIsOpen: false,
+      currentNote: this.state.currentNote
     });
     this.timer = setInterval(() => {
       this.setState({
         timerTime: Date.now() - this.state.timerStart,
       });
     }, 1000);
+    console.log('currentNote:', this.state.currentNote)
   };
 
   // Stops timing the users practice session
@@ -137,7 +171,12 @@ class Times extends Component {
       timerTime: 0,
     });
   };
-
+  handleChange(evt) {
+    this.setState({
+      [evt.target.name]: evt.target.value,
+    });
+  }
+ 
   render() {
     const { timerTime, times, loading } = this.state;
     let seconds = ("0" + (Math.floor(timerTime / 1000) % 60)).slice(-2);
@@ -152,10 +191,11 @@ class Times extends Component {
 
               {times && (
                 <>
-                  <h2 className="text-left">Hours</h2>
+                  <h2 className="text-left">Time Played</h2>
                   <TimeList
                     authUser={authUser}
                     times={times}
+                    notes={this.state.notes}
                     onRemoveTime={this.onRemoveTime}
                   />
                 </>
@@ -175,15 +215,15 @@ class Times extends Component {
               <div className="timerContainer">
                 {this.state.timerOn === false && this.state.timerTime === 0 && (
                   <>
-                    <Modal
+                    <Modal 
                       isOpen={this.state.modalIsOpen}
                       onAfterOpen={this.afterOpenModal}
                       onRequestClose={this.closeModal}
                       style={customStyles}
-                      contentLabel="Example Modal"
+                      contentLabel="Starting Practice Modal"
                     >
                       <h2 ref={subtitle => (this.subtitle = subtitle)}>
-                        You can do it!
+                        What are you working on today?
                       </h2>
                       <button
                         className="align-center"
@@ -191,14 +231,22 @@ class Times extends Component {
                       >
                         START
                       </button>
-                      <form>
-                        <span className="input">
-                          <input type="text" placeholder="Notes" />
-                          <span />
-                        </span>
+                      <form >
+                        <label htmlFor="note">New Note</label>
+                        <input
+                          id="currentNote"
+                          type="text"
+                          placeholder="Notes"
+                          name="currentNote"
+                          value={this.state.currentNote}
+                          onChange={this.handleChange}
+                        />
                       </form>
                     </Modal>
-                    <button className="stopwatchBtn playBtn p" onClick={this.openModal}>
+                    <button
+                      className="stopwatchBtn playBtn p"
+                      onClick={this.openModal}
+                    >
                       <i className="fas fa-play" />
                     </button>
                   </>
@@ -232,11 +280,13 @@ class Times extends Component {
                     className="stopwatchBtn logSession reset p mx"
                     onClick={event => this.onCreateTime(event, authUser)}
                   >
-                    Log Session
+                    Submit
                   </button>
                 )}
               </div>
             </div>
+
+            <Chart chartData={this.state.chartData} legendPosition="bottom" />
           </div>
         )}
       </AuthUserContext.Consumer>

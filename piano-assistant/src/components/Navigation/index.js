@@ -17,13 +17,14 @@ const Navigation = () => (
 
 const NavigationAuth = ({ authUser }) => (
   <div className="navContainer">
-    <h1>Piano Time</h1>
+    <h1>Pian<i class="fas fa-stopwatch" /> Time</h1>
+    
     <ul>
       <li>
-        <Link to={ROUTES.LANDING}>Landing</Link>
+        <Link to={ROUTES.LANDING}>Home</Link>
       </li>
       <li>
-        <Link to={ROUTES.HOME}>Home</Link>
+        <Link to={ROUTES.HOME}>Session</Link>
       </li>
       <li>
         <Link to={ROUTES.ACCOUNT}>Account</Link>
@@ -42,9 +43,10 @@ const NavigationAuth = ({ authUser }) => (
 
 const NavigationNonAuth = () => (
   <div className="navContainer">
+    <h1>Pian<i class="fas fa-stopwatch" /> Time</h1>
     <ul>
       <li>
-        <Link to={ROUTES.LANDING}>Landing</Link>
+        <Link to={ROUTES.LANDING}>Home</Link>
       </li>
       <li>
         <Link to={ROUTES.SIGN_IN}>Sign In</Link>

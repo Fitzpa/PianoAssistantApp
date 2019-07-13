@@ -1,9 +1,15 @@
-import React from 'react';
+import React, { Component } from "react";
+import Quotes from "../Quotes";
+class Landing extends Component {
+  
 
-const Landing = () => (
-  <div>
-    <h1>Landing</h1>
-  </div>
-);
+  render() {
+    return (
+      <div>
+        <Quotes />
+      </div>
+    );
+  }
+}
 
 export default Landing;

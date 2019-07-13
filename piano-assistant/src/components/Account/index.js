@@ -127,7 +127,7 @@ class LoginManagementBase extends Component {
             );
           })}
         </ul>
-        {error && error.message}
+        {error}
       </div>
     );
   }
